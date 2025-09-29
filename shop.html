@@ -120,10 +120,10 @@
       <div class="header__actions">
         <button class="lang-switch" id="langRu" data-lang="ru">RU</button>
         <button class="lang-switch" id="langKz" data-lang="kz">KZ</button>
-<a href="shop.html#cart" class="cart-link" id="cartLink" aria-label="Open cart" style="display:inline-flex;align-items:center;gap:6px;margin-left:8px">
-          <span class="cart-icon" aria-hidden="true">🛒</span>
-          <span class="badge" id="cartBadge">0</span>
-        </a>
+<a href="#cart" class="cart-link" id="cartLink" aria-label="Open cart">
+  <span class="cart-icon" aria-hidden="true">🛒</span>
+  <span class="badge" id="cartBadge">0</span>
+</a>
         <button class="burger" id="burger" aria-label="Open menu">
           <span></span><span></span><span></span>
         </button>
@@ -235,10 +235,9 @@
     state.shown = slice.length;
 
     const controls = `
-      <div class="toolbar">
-        <div class="muted">Found: <b>${total}</b></div>
-        <div><a class="btn ghost" href="#cart">Go to cart (<span id="badgeInline">${cartCount()}</span>)</a></div>
-      </div>`;
+  <div class="toolbar">
+    <div class="muted">Found: <b>${total}</b></div>
+  </div>`;
 
     const grid = `<section class="grid" id="grid">${slice.map(cardHTML).join('')}</section>`;
     const more = (state.shown < total) ? `<div style="display:flex;justify-content:center;margin:18px 0"><button class="btn" id="loadMore">Show more</button></div>` : '';
@@ -416,6 +415,14 @@
   document.getElementById('category').addEventListener('change', (e)=>{ state.category = e.target.value; applyFilters(); });
 
   updateCartBadge(); loadProducts(); route();
+    const cartLinkEl = document.getElementById("cartLink");
+if (cartLinkEl) {
+  cartLinkEl.addEventListener("click", (e) => {
+    e.preventDefault();
+    location.hash = "#cart"; // триггерим route() и отрисовку корзины
+  });
+}
+
   </script>
 
   <!-- Embedded fallback CSV (used when products.csv cannot be fetched) -->
