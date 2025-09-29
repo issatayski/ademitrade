@@ -1,0 +1,11 @@
+id,title,category,price,discount,image
+p1,Red Apples 1kg,Fruits,850,750,https://picsum.photos/seed/apples/600
+p2,Ripe Bananas 1kg,Fruits,920,,https://picsum.photos/seed/bananas/600
+p3,Pink Tomatoes 1kg,Vegetables,980,890,https://picsum.photos/seed/tomatoes/600
+p4,Ground Cucumbers 1kg,Vegetables,700,,https://picsum.photos/seed/cucumbers/600
+p5,Milk 2.5% 1L,Dairy,520,480,https://picsum.photos/seed/milk/600
+p6,Wheat Bread 500g,Bakery,350,,https://picsum.photos/seed/bread/600
+p7,Gouda Cheese 200g,Dairy,1800,1590,https://picsum.photos/seed/cheese/600
+p8,Mineral Water 1.5L,Drinks,260,,https://picsum.photos/seed/water/600
+p9,Milk Chocolate 90g,Snacks,520,460,https://picsum.photos/seed/chocolate/600
+p10,Strawberry Yogurt 125g,Dairy,320,,https://picsum.photos/seed/yogurt/600
