@@ -1,390 +1,338 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Food Shop — магазин на CSV</title>
-  <style>
-    :root{
-      --bg:#0f1115; --card:#151923; --muted:#8b93a7; --text:#e9edf5; --brand:#5aa8ff; --brand-2:#9ed968; --danger:#ff6b6b;
-      --ring: rgba(90,168,255,.35);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Noto Sans',Arial,sans-serif;background:linear-gradient(180deg,#0f1115 0%,#0f1320 100%);color:var(--text)}
-    a{color:inherit;text-decoration:none}
-    .container{max-width:1100px;margin:0 auto;padding:20px}
-    header{position:sticky;top:0;z-index:20;background:rgba(15,19,32,.7);backdrop-filter: blur(8px);border-bottom:1px solid #222}
-    header .wrap{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:12px 0}
-    .logo{font-weight:700;letter-spacing:.4px}
-    .controls{display:flex;gap:10px;flex-wrap:wrap}
-    .input, select{background:var(--card);border:1px solid #222;border-radius:12px;color:var(--text);padding:12px 14px;outline:none;min-width:220px}
-    .input:focus, select:focus{border-color:var(--brand); box-shadow:0 0 0 6px var(--ring)}
-    .btn{border:0;border-radius:12px;padding:12px 16px;background:var(--brand);color:#04121e;font-weight:700;cursor:pointer}
-    .btn.secondary{background:#222;color:var(--text);border:1px solid #2a2f3a}
-    .btn.ghost{background:transparent;border:1px solid #2a2f3a;color:var(--text)}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
-    .cart-link{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid #2a2f3a;border-radius:12px;background:var(--card)}
-    .badge{display:inline-block;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--brand-2);color:#072;line-height:20px;text-align:center;font-size:12px;font-weight:800}
-    .grid{display:grid;gap:14px}
-    @media(min-width:741px){.grid{grid-template-columns:repeat(4,1fr)}}
-    @media(max-width:740px){.grid{grid-template-columns:repeat(2,1fr)}}
-    .card{background:var(--card);border:1px solid #222;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-    .card-img{aspect-ratio:1/1;background:#0b0e16;display:grid;place-items:center}
-    .card-img img{width:100%;height:100%;object-fit:cover}
-    .card-body{padding:12px;display:flex;flex-direction:column;gap:10px}
-    .card-title{font-weight:700;font-size:14px;min-height:38px}
-    .price{display:flex;align-items:center;gap:8px}
-    .price .old{color:#9aa3b6;text-decoration:line-through}
-    .price .new{color:#cdeaff;font-weight:800}
-    .card .btn{width:100%}
-    .toolbar{display:flex;justify-content:space-between;align-items:center;margin:14px 0}
-    .muted{color:var(--muted)}
-    .empty{padding:40px;border:1px dashed #2a2f3a;border-radius:16px;text-align:center;color:var(--muted)}
-    .cart{display:grid;gap:16px}
-    .table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid #222;border-radius:14px;overflow:hidden}
-    .table th,.table td{padding:12px;border-bottom:1px solid #222;text-align:left}
-    .table th{background:#121726;color:#b9c2d6}
-    .qty{display:inline-flex;align-items:center;border:1px solid #2a2f3a;border-radius:10px;overflow:hidden}
-    .qty button{all:unset;padding:6px 10px;cursor:pointer}
-    .qty input{width:48px;background:transparent;border:0;color:var(--text);text-align:center}
-    .totals{display:flex;justify-content:flex-end;gap:24px;align-items:center}
-    .danger{color:var(--danger)}
-    .checkout{background:var(--card);border:1px solid #222;border-radius:16px;padding:16px;display:grid;gap:12px}
-    .checkout h3{margin:0}
-    .field{display:grid;gap:6px}
-    .field input, .field textarea{background:#0d1220;border:1px solid #202535;border-radius:12px;color:var(--text);padding:12px}
-    footer{padding:40px 0;color:#71809b;text-align:center}
-    .alert{background:#24151a;border:1px solid #3a1e27;color:#ffb3bd;padding:10px 12px;border-radius:12px;margin:12px 0}
-  /* Mobile cart layout */
-@media (max-width: 740px){
-  .cart thead{ display:none; }
-  .cart table{ width:100%; border-collapse: separate; border-spacing: 0 12px; }
-  .cart tbody tr{ display:block; border:1px solid #222; border-radius:16px; padding:12px; background:var(--card); }
-  .cart tbody tr + tr{ margin-top:12px; }
-  .cart tbody tr td{ display:flex; justify-content:space-between; align-items:center; border:none; padding:8px 6px; }
-  .cart tbody tr td.td-img{ display:block; padding:0 0 8px 0; }
-  .cart tbody tr td.td-img > div{ width:100%; height:140px; }
-  .cart tbody tr td[data-label]::before{ content: attr(data-label); font-size:12px; opacity:.7; margin-right:12px; }
-  .cart .qty{ gap:8px; }
-  .cart .qty .qminus, .cart .qty .qplus{ width:36px; height:36px; }
-  .cart .qty .qinput{ width:64px; }
-}
-</style>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script>
-    const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
-    const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
-    const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY);
-    });
-  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FMCG Distributor — RU/KZ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <div class="container wrap">
-      <div class="logo">🍎 Food Shop</div>
-      <nav class="controls">
-        <input id="search" class="input" type="search" placeholder="Search products…" />
-        <select id="category"></select>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__inner">
+      <a class="logo" href="#"><span>FMCG</span> Distributor</a>
+      <nav class="nav" id="siteNav" aria-label="Primary">
+        <button class="nav__close" id="navClose" aria-label="Close menu">×</button>
+        <ul>
+          <li><a href="#hero" data-i18n="nav.home">Главная</a></li>
+          <li><a href="#about" data-i18n="nav.about">О компании</a></li>
+          <li><a href="#catalog" data-i18n="nav.catalog">Каталог</a></li>
+          <li><a href="#brands" data-i18n="nav.brands">Бренды</a></li>
+          <li><a href="#benefits" data-i18n="nav.benefits">Преимущества</a></li>
+          <li><a href="#contacts" data-i18n="nav.contacts">Контакты</a></li>
+        </ul>
       </nav>
-      <a href="#cart" class="cart-link" id="cartLink" aria-label="Open cart">
-        <span>Cart</span>
-        <span class="badge" id="cartBadge">0</span>
-      </a>
+
+      <div class="header__actions">
+        <button class="lang-switch" id="langRu" data-lang="ru">RU</button>
+        <button class="lang-switch" id="langKz" data-lang="kz">KZ</button>
+        <button class="burger" id="burger" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="container" id="app"></main>
+  <main>
+    <!-- 1. Hero -->
+    <section id="hero" class="section hero">
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <h1 data-i18n="hero.title">Надёжный дистрибьютор товаров народного потребления</h1>
+          <p class="lead" data-i18n="hero.subtitle">Оптовые поставки продуктов питания, напитков и товаров для дома по всей стране</p>
+          <div class="hero__cta">
+            <a href="#catalog" class="btn btn--primary" data-i18n="hero.cta_catalog">Каталог продукции</a>
+            <a href="#partners" class="btn btn--outline" data-i18n="hero.cta_partner">Стать партнёром</a>
+          </div>
+        </div>
+        <div class="hero__image" role="img" aria-label="Assorted FMCG products">
+          <img src="assets/img/hero-placeholder.jpg" alt="Ассортимент FMCG" />
+        </div>
+      </div>
+    </section>
 
-  <footer>
-    <div class="container">Data from <code>products.csv</code>; cart in <code>localStorage</code>. EmailJS for checkout.</div>
+    <!-- 2. About -->
+    <section id="about" class="section about">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="about.title">О компании</h2>
+          <p data-i18n="about.desc">Мы помогаем брендам и розничным сетям эффективно встречаться на полке — надёжная логистика, стабильные поставки и поддержка партнёров.</p>
+        </div>
+        <div class="grid grid--4 about__stats">
+          <div class="card stat">
+            <div class="stat__num">20+</div>
+            <div class="stat__label" data-i18n="about.years">лет на рынке</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">500+</div>
+            <div class="stat__label" data-i18n="about.clients">клиентов</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">1000+</div>
+            <div class="stat__label" data-i18n="about.sku">SKU в портфеле</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">15</div>
+            <div class="stat__label" data-i18n="about.regions">регионов доставки</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Catalog -->
+    <section id="catalog" class="section catalog">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="catalog.title">Категории продукции</h2>
+          <p data-i18n="catalog.desc">Сбалансированный портфель брендов для розницы, HoReCa и e‑commerce</p>
+        </div>
+        <div class="grid grid--4">
+          <article class="card category">
+            <img class="cat__img" src="assets/img/cat-food.jpg" alt="Продукты питания" />
+            <h3 data-i18n="catalog.food">Продукты питания</h3>
+            <p data-i18n="catalog.food_desc">Крупы, снеки, кондитерка, бакалея и more</p>
+            <a href="#partners" class="link" data-i18n="common.more">Подробнее</a>
+          </article>
+          <article class="card category">
+            <img class="cat__img" src="assets/img/cat-drinks.jpg" alt="Напитки" />
+            <h3 data-i18n="catalog.drinks">Напитки</h3>
+            <p data-i18n="catalog.drinks_desc">Вода, соки, энергетики, чай/кофе</p>
+            <a href="#partners" class="link" data-i18n="common.more">Подробнее</a>
+          </article>
+          <article class="card category">
+            <img class="cat__img" src="assets/img/cat-household.jpg" alt="Бытовая химия" />
+            <h3 data-i18n="catalog.household">Бытовая химия</h3>
+            <p data-i18n="catalog.household_desc">Чистящие, моющие, уход за домом</p>
+            <a href="#partners" class="link" data-i18n="common.more">Подробнее</a>
+          </article>
+          <article class="card category">
+            <img class="cat__img" src="assets/img/cat-family.jpg" alt="Товары для семьи" />
+            <h3 data-i18n="catalog.family">Товары для семьи</h3>
+            <p data-i18n="catalog.family_desc">Гигиена, косметика, товары для детей</p>
+            <a href="#partners" class="link" data-i18n="common.more">Подробнее</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Brands -->
+    <section id="brands" class="section brands">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="brands.title">Популярные бренды</h2>
+          <p data-i18n="brands.desc">Сотрудничаем с международными и локальными производителями</p>
+        </div>
+        <div class="brands__list">
+          <img src="assets/img/brand1.png" alt="Brand 1" />
+          <img src="assets/img/brand2.png" alt="Brand 2" />
+          <img src="assets/img/brand3.png" alt="Brand 3" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Benefits -->
+    <section id="benefits" class="section benefits">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="benefits.title">Наши преимущества</h2>
+          <p data-i18n="benefits.desc">Прозрачные условия, быстрая поставка и поддержка мерчендайзинга</p>
+        </div>
+        <div class="grid grid--4">
+          <div class="card benefit">
+            <h3 data-i18n="benefits.assort">Широкий ассортимент</h3>
+            <p data-i18n="benefits.assort_desc">Сбалансированные SKU по категориям и ценовым сегментам</p>
+          </div>
+          <div class="card benefit">
+            <h3 data-i18n="benefits.logistics">Надёжная логистика</h3>
+            <p data-i18n="benefits.logistics_desc">Собственные и партнёрские склады, точные отгрузки</p>
+          </div>
+          <div class="card benefit">
+            <h3 data-i18n="benefits.terms">Гибкие условия</h3>
+            <p data-i18n="benefits.terms_desc">Индивидуальные условия для розницы, HoReCa и e‑com</p>
+          </div>
+          <div class="card benefit">
+            <h3 data-i18n="benefits.support">Поддержка партнёров</h3>
+            <p data-i18n="benefits.support_desc">POS‑материалы, промо и трейд‑маркетинг</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Geography -->
+    <section id="geo" class="section geo">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="geo.title">География поставок</h2>
+          <p data-i18n="geo.desc">Охватываем ключевые города и регионы</p>
+        </div>
+        <div class="geo__map">
+          <img src="assets/img/map-placeholder.jpg" alt="Карта поставок" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Partners -->
+    <section id="partners" class="section partners">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="partners.title">Условия для партнёров</h2>
+          <p data-i18n="partners.desc">Прозрачные правила и быстрый онбординг</p>
+        </div>
+        <div class="grid grid--3">
+          <div class="card">
+            <h3 data-i18n="partners.moq">Минимальная партия</h3>
+            <p data-i18n="partners.moq_desc">Гибкие MOQ для разных каналов</p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="partners.delivery">Доставка</h3>
+            <p data-i18n="partners.delivery_desc">Регулярные графики и SLA</p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="partners.support">Поддержка</h3>
+            <p data-i18n="partners.support_desc">Обучение персонала и маркетинговая поддержка</p>
+          </div>
+        </div>
+        <a href="#contacts" class="btn btn--primary partners__cta" data-i18n="partners.cta">Запросить прайс-лист</a>
+      </div>
+    </section>
+
+    <!-- 8. News -->
+    <section id="news" class="section news">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="news.title">Новости и акции</h2>
+          <p data-i18n="news.desc">Спецпредложения и новые поступления</p>
+        </div>
+        <div class="grid grid--3">
+          <article class="card post">
+            <img class="post__img" src="assets/img/news-1.jpg" alt="Скидка на чай и кофе" />
+            <h3 data-i18n="news.post1_title">Скидка на чай и кофе</h3>
+            <p data-i18n="news.post1_desc">Выгодные условия для HoReCa на Q4</p>
+          </article>
+          <article class="card post">
+            <img class="post__img" src="assets/img/news-2.jpg" alt="Новые бренды в портфеле" />
+            <h3 data-i18n="news.post2_title">Новые бренды в портфеле</h3>
+            <p data-i18n="news.post2_desc">Расширяем ассортимент бакалеи</p>
+          </article>
+          <article class="card post">
+            <img class="post__img" src="assets/img/news-3.jpg" alt="График доставок" />
+            <h3 data-i18n="news.post3_title">График доставок</h3>
+            <p data-i18n="news.post3_desc">Обновления по ключевым направлениям</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Reviews -->
+    <section id="reviews" class="section reviews">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="reviews.title">Отзывы партнёров</h2>
+          <p data-i18n="reviews.desc">Нам доверяют локальные сети и федеральные игроки</p>
+        </div>
+        <div class="grid grid--3">
+          <blockquote class="card quote">
+            <p data-i18n="reviews.q1">Надёжные сроки, аккуратные поставки — рекомендую!</p>
+            <cite>Retail Manager</cite>
+          </blockquote>
+          <blockquote class="card quote">
+            <p data-i18n="reviews.q2">Удобный прайс и разумные MOQ — легко стартовать.</p>
+            <cite>HoReCa Lead</cite>
+          </blockquote>
+          <blockquote class="card quote">
+            <p data-i18n="reviews.q3">Помогли с мерчендайзингом и промо — продажи выросли.</p>
+            <cite>E‑com Buyer</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Facts -->
+    <section id="facts" class="section facts">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="facts.title">Факты о нас</h2>
+          <p data-i18n="facts.desc">Сухие цифры — лучшая иллюстрация стабильности</p>
+        </div>
+        <div class="grid grid--4 about__stats">
+          <div class="card stat">
+            <div class="stat__num">98%</div>
+            <div class="stat__label" data-i18n="facts.otif">OTIF по отгрузкам</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">48ч</div>
+            <div class="stat__label" data-i18n="facts.sla">Средний SLA доставки</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">30+</div>
+            <div class="stat__label" data-i18n="facts.brands">брендов в портфеле</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">10k+</div>
+            <div class="stat__label" data-i18n="facts.pallets">паллето‑мест на складе</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Contacts -->
+    <section id="contacts" class="section contacts">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="contacts.title">Контакты</h2>
+          <p data-i18n="contacts.desc">Оставьте заявку — вернёмся с прайсом и условиями</p>
+        </div>
+        <form class="form" onsubmit="event.preventDefault(); alert(i18n.t('contacts.alert'));">
+          <div class="grid grid--2 form__grid">
+            <label class="field">
+              <span data-i18n="form.name">Имя</span>
+              <input type="text" placeholder="" required>
+            </label>
+            <label class="field">
+              <span data-i18n="form.company">Компания</span>
+              <input type="text" placeholder="" required>
+            </label>
+            <label class="field">
+              <span data-i18n="form.email">Email</span>
+              <input type="email" placeholder="" required>
+            </label>
+            <label class="field">
+              <span data-i18n="form.phone">Телефон</span>
+              <input type="tel" placeholder="" required>
+            </label>
+            <label class="field field--full">
+              <span data-i18n="form.message">Сообщение</span>
+              <textarea rows="4" placeholder=""></textarea>
+            </label>
+          </div>
+          <button class="btn btn--primary" type="submit" data-i18n="form.submit">Отправить</button>
+          <div class="contacts__quick">
+            <a href="#" class="chip">WhatsApp</a>
+            <a href="#" class="chip">Telegram</a>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- 12. Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© <span id="year"></span> FMCG Distributor</p>
+      <nav class="footer__nav">
+        <a href="#catalog" data-i18n="nav.catalog">Каталог</a>
+        <a href="#about" data-i18n="nav.about">О компании</a>
+        <a href="#contacts" data-i18n="nav.contacts">Контакты</a>
+      </nav>
+    </div>
   </footer>
 
-  <script>
-  const fmtPrice = (n) => new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 }).format(Number(n||0)) + ' ₸';
+  <div class="overlay" id="overlay"></div>
 
-  function parseCSV(text){
-    const lines = text.trim().split(/\r?\n/);
-    const headers = splitCSVLine(lines.shift());
-    return lines.filter(Boolean).map(line=>{
-      const cols = splitCSVLine(line);
-      const obj = {};
-      headers.forEach((h,i)=> obj[h.trim()] = (cols[i]||'').trim());
-      return obj;
-    });
-  }
-  function splitCSVLine(line){
-    const out=[]; let cur=''; let q=false;
-    for(let i=0;i<line.length;i++){
-      const c=line[i];
-      if(c==='"'){ if(q && line[i+1]==='"'){ cur+='"'; i++; } else q=!q; }
-      else if(c===',' && !q){ out.push(cur); cur=''; }
-      else cur+=c;
-    }
-    out.push(cur);
-    return out;
-  }
-
-  const state = { products: [], filtered: [], pageSize: 12, shown: 0, search: '', category: 'All' };
-  const CART_KEY = 'csvshop_cart_v1';
-  const loadCart = () => JSON.parse(localStorage.getItem(CART_KEY)||'{}');
-  const saveCart = (c) => localStorage.setItem(CART_KEY, JSON.stringify(c));
-  const cartCount = () => Object.values(loadCart()).reduce((s,i)=> s + Number(i.qty||0), 0);
-  const updateCartBadge = () => document.getElementById('cartBadge').textContent = cartCount();
-
-  async function loadProducts(){
-    try{
-      const res = await fetch('products.csv', {cache:'no-store'});
-      if(!res.ok) throw new Error('HTTP ' + res.status);
-      const text = await res.text();
-      state.products = parseCSV(text).map(p => ({
-        id: p.id, title: p.title, category: p.category || 'Other',
-        price: Number(p.price||0), discount: p.discount? Number(p.discount): null, image: p.image || ''
-      }));
-      console.log('Loaded from products.csv:', state.products);
-    }catch(e){
-      console.warn('products.csv not loaded, fallback used:', e);
-      // Fallback to embedded CSV
-      const csv = document.getElementById('fallback-csv').textContent.trim();
-      state.products = parseCSV(csv).map(p => ({
-        id: p.id, title: p.title, category: p.category || 'Other',
-        price: Number(p.price||0), discount: p.discount? Number(p.discount): null, image: p.image || ''
-      }));
-      const app = document.getElementById('app');
-      const alert = document.createElement('div');
-      alert.className = 'alert';
-      alert.textContent = 'products.csv не найден или заблокирован браузером (file://). Показаны товары из встроенного списка. Разместите файлы на хостинге/локальном сервере.';
-      app.before(alert);
-    }
-    applyFilters(); renderFilters();
-  }
-
-  function applyFilters(){
-    const q = state.search.toLowerCase();
-    const cat = state.category;
-    state.filtered = state.products.filter(p=>{
-      const okQ = !q || p.title.toLowerCase().includes(q);
-      const okC = cat==='All' || p.category===cat;
-      return okQ && okC;
-    });
-    state.shown = 0; renderShop();
-  }
-
-  function renderFilters(){
-    const select = document.getElementById('category');
-    const cats = Array.from(new Set(state.products.map(p=>p.category))).sort();
-    select.innerHTML = ['All', ...cats].map(c=>`<option value="${c}">${c}</option>`).join('');
-    select.value = state.category;
-  }
-
-  function route(){ if(location.hash === '#cart') renderCart(); else renderShop(); }
-  window.addEventListener('hashchange', route);
-
-  function renderShop(){
-    const app = document.getElementById('app');
-    const total = state.filtered.length;
-    const slice = state.filtered.slice(0, state.shown + state.pageSize);
-    state.shown = slice.length;
-
-    const controls = `
-      <div class="toolbar">
-        <div class="muted">Found: <b>${total}</b></div>
-        <div><a class="btn ghost" href="#cart">Go to cart (<span id="badgeInline">${cartCount()}</span>)</a></div>
-      </div>`;
-
-    const grid = `<section class="grid" id="grid">${slice.map(cardHTML).join('')}</section>`;
-    const more = (state.shown < total) ? `<div style="display:flex;justify-content:center;margin:18px 0"><button class="btn" id="loadMore">Show more</button></div>` : '';
-
-    app.innerHTML = controls + grid + more;
-    document.getElementById('grid').addEventListener('click', onGridClick);
-    const btn = document.getElementById('loadMore');
-    if(btn) btn.addEventListener('click', ()=> renderShop());
-    const badgeInline = document.getElementById('badgeInline');
-    if(badgeInline) badgeInline.textContent = cartCount();
-  }
-
-  function cardHTML(p){
-    const inCartQty = (loadCart()[p.id]?.qty) || 0;
-    const hasDiscount = p.discount && p.discount < p.price;
-    return `
-      <article class="card" data-id="${p.id}">
-        <div class="card-img">${p.image ? `<img src="${p.image}" alt="${escapeHtml(p.title)}">` : '<span class="muted">no image</span>'}</div>
-        <div class="card-body">
-          <div class="card-title">${escapeHtml(p.title)}</div>
-          <div class="price">
-            ${hasDiscount ? `<span class="old">${fmtPrice(p.price)}</span><span class="new">${fmtPrice(p.discount)}</span>` : `<span class="new">${fmtPrice(p.price)}</span>`}
-          </div>
-          <button class="btn add" data-id="${p.id}">${inCartQty ? 'Add more' : 'Add to cart'}</button>
-          ${inCartQty ? `<div class="muted">In cart: ${inCartQty}</div>` : ''}
-        </div>
-      </article>`;
-  }
-
-  function onGridClick(e){
-    const btn = e.target.closest('.add');
-    if(!btn) return;
-    const id = btn.getAttribute('data-id');
-    const prod = state.products.find(x=> x.id===id);
-    addToCart(prod, 1);
-    updateCartBadge();
-    const card = btn.closest('.card');
-    if(card){ card.outerHTML = cardHTML(prod); }
-  }
-
-  function addToCart(prod, qty){
-    const cart = loadCart();
-    if(!cart[prod.id]) cart[prod.id] = { id: prod.id, title: prod.title, price: prod.price, discount: prod.discount, image: prod.image, qty: 0 };
-    cart[prod.id].qty += qty;
-    saveCart(cart);
-  }
-
-  function renderCart(){
-    const app = document.getElementById('app');
-    const cart = loadCart();
-    const items = Object.values(cart).filter(i=> i.qty>0);
-    if(items.length===0){
-      app.innerHTML = `<div class="empty">Cart is empty. <a class="btn secondary" href="#">Back to shop</a></div>`;
-      updateCartBadge();
-      return;
-    }
-    const rows = items.map(i=>{
-      const unit = (i.discount && i.discount<i.price) ? i.discount : i.price;
-      const line = unit * i.qty;
-      return `
-        <tr data-id="${i.id}">
-          <td class="td-img" style="width:64px"><div style="width:56px;height:56px;background:#0b0e16;border-radius:8px;overflow:hidden">${i.image?`<img src="${i.image}" alt="" style="width:100%;height:100%;object-fit:cover">`:''}</div></td>
-          <td class="td-title" data-label="Product" style="min-width:220px">${escapeHtml(i.title)}</td>
-          <td class="td-price" data-label="Price">${fmtPrice(unit)}</td>
-          <td class="td-qty" data-label="Qty">
-            <div class="qty">
-              <button class="qminus" aria-label="Minus">−</button>
-              <input class="qinput" type="number" min="1" value="${i.qty}" />
-              <button class="qplus" aria-label="Plus">+</button>
-            </div>
-          </td>
-          <td class="td-total line" data-label="Total">${fmtPrice(line)}</td>
-          <td><button class="btn secondary remove">Remove</button></td>
-        </tr>`;
-    }).join('');
-
-    const total = items.reduce((s,i)=> s + ((i.discount && i.discount<i.price)? i.discount : i.price) * i.qty, 0);
-
-    app.innerHTML = `
-      <div class="cart">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <a class="btn ghost" href="#">← Continue shopping</a>
-          <div class="muted">Items: <b>${cartCount()}</b></div>
-        </div>
-        <table class="table">
-          <thead><tr><th></th><th>Product</th><th>Price</th><th>Qty</th><th>Total</th><th></th></tr></thead>
-          <tbody id="cartBody">${rows}</tbody>
-        </table>
-        <div class="totals"><div class="muted">Subtotal:</div><div style="font-size:20px;font-weight:800">${fmtPrice(total)}</div></div>
-        <div style="display:flex;gap:10px;justify-content:flex-end">
-          <button class="btn ghost" id="clearCart">Clear cart</button>
-          <button class="btn" id="buyBtn">Buy</button>
-        </div>
-        <section class="checkout" id="checkout" hidden>
-          <h3>Checkout</h3>
-          <div class="field">
-            <label>Selected items</label>
-            <textarea id="orderItems" rows="5" readonly></textarea>
-          </div>
-          <div class="field">
-            <label>Your name</label>
-            <input id="buyerName" type="text" placeholder="Name" />
-          </div>
-          <div class="field">
-            <label>Phone</label>
-            <input id="buyerPhone" type="tel" placeholder="+7 ___ ___ __ __" />
-          </div>
-          <div style="display:flex;gap:10px;justify-content:flex-end">
-            <button class="btn secondary" id="cancelCheckout">Cancel</button>
-            <button class="btn" id="submitOrder">Send</button>
-          </div>
-          <div class="muted">* EmailJS. Fill your keys/IDs at the top of the file.</div>
-        </section>
-      </div>`;
-
-    document.getElementById('cartBody').addEventListener('click', onCartClick);
-    document.getElementById('cartBody').addEventListener('change', onQtyChange);
-    document.getElementById('clearCart').addEventListener('click', ()=>{ saveCart({}); route(); });
-    document.getElementById('buyBtn').addEventListener('click', openCheckout);
-  }
-
-  function onCartClick(e){
-    const tr = e.target.closest('tr'); if(!tr) return;
-    const id = tr.getAttribute('data-id');
-    const cart = loadCart();
-    if(e.target.classList.contains('qplus')){ cart[id].qty++; }
-    if(e.target.classList.contains('qminus')){ cart[id].qty = Math.max(1, cart[id].qty-1); }
-    if(e.target.classList.contains('remove')){ delete cart[id]; }
-    saveCart(cart); renderCart(); updateCartBadge();
-  }
-  function onQtyChange(e){
-    const input = e.target.closest('.qinput'); if(!input) return;
-    const tr = e.target.closest('tr'); const id = tr.getAttribute('data-id');
-    const cart = loadCart(); cart[id].qty = Math.max(1, Number(input.value||1));
-    saveCart(cart); renderCart(); updateCartBadge();
-  }
-
-  function openCheckout(){
-    const el = document.getElementById('checkout'); el.hidden = false;
-    const cart = loadCart();
-    const items = Object.values(cart).filter(i=> i.qty>0);
-    const lines = items.map(i=> `${i.title} — ${i.qty}`);
-    document.getElementById('orderItems').value = lines.join('\n');
-    document.getElementById('cancelCheckout').onclick = ()=> el.hidden = true;
-    document.getElementById('submitOrder').onclick = submitOrder;
-  }
-
-  async function submitOrder(){
-    const name = document.getElementById('buyerName').value.trim();
-    const phone = document.getElementById('buyerPhone').value.trim();
-    const items = Object.values(loadCart()).filter(i=> i.qty>0);
-    if(!name || !phone){ alert('Fill name and phone'); return; }
-    const total = items.reduce((s,i)=> s + ((i.discount && i.discount<i.price)? i.discount : i.price) * i.qty, 0);
-    const params = {
-      buyer_name: name,
-      buyer_phone: phone,
-      order_text: items.map(i=> `${i.title} — ${i.qty}`).join('\n'),
-      order_total: total.toString(),
-      cart_count: items.reduce((s,i)=> s + i.qty, 0),
-      order_total_formatted: (typeof fmtPrice==='function'? fmtPrice(total) : total.toString())};
-    try{
-      if(!window.emailjs){ throw new Error('EmailJS SDK not loaded'); }
-      const res = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
-      alert('Order sent! Status: ' + (res.status || 'OK'));
-      localStorage.removeItem('csvshop_cart_v1'); route(); updateCartBadge();
-    }catch(err){
-      console.error(err);
-      alert('EmailJS send failed. Check keys/IDs.');
-    }
-  }
-
-  function escapeHtml(str=''){ return str.replace(/[&<>"']/g, s=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[s])); }
-
-  document.getElementById('search').addEventListener('input', (e)=>{ state.search = e.target.value; applyFilters(); });
-  document.getElementById('category').addEventListener('change', (e)=>{ state.category = e.target.value; applyFilters(); });
-
-  updateCartBadge(); loadProducts(); route();
-  </script>
-
-  <!-- Embedded fallback CSV (used when products.csv cannot be fetched) -->
-  <script id="fallback-csv" type="text/plain">
-id,title,category,price,discount,image
-p1,Red Apples 1kg,Fruits,850,750,https://picsum.photos/seed/apples/600
-p2,Ripe Bananas 1kg,Fruits,920,,https://picsum.photos/seed/bananas/600
-p3,Pink Tomatoes 1kg,Vegetables,980,890,https://picsum.photos/seed/tomatoes/600
-p4,Ground Cucumbers 1kg,Vegetables,700,,https://picsum.photos/seed/cucumbers/600
-p5,Milk 2.5% 1L,Dairy,520,480,https://picsum.photos/seed/milk/600
-p6,Wheat Bread 500g,Bakery,350,,https://picsum.photos/seed/bread/600
-p7,Gouda Cheese 200g,Dairy,1800,1590,https://picsum.photos/seed/cheese/600
-p8,Mineral Water 1.5L,Drinks,260,,https://picsum.photos/seed/water/600
-p9,Milk Chocolate 90g,Snacks,520,460,https://picsum.photos/seed/chocolate/600
-p10,Strawberry Yogurt 125g,Dairy,320,,https://picsum.photos/seed/yogurt/600
-  </script>
+  <script src="scripts.js"></script>
 </body>
 </html>
