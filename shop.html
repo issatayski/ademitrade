@@ -73,9 +73,9 @@
 </style>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    const EMAILJS_PUBLIC_KEY = "5Z6mho52RiNy1HLcO";
-    const EMAILJS_SERVICE_ID = "service_sny2sav";
-    const EMAILJS_TEMPLATE_ID = "template_4f3l38l";
+    const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+    const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
+    const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
     document.addEventListener('DOMContentLoaded', () => {
       if (window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY);
     });
@@ -350,8 +350,9 @@
       buyer_name: name,
       buyer_phone: phone,
       order_text: items.map(i=> `${i.title} — ${i.qty}`).join('\n'),
-      order_total: total.toString()
-    };
+      order_total: total.toString(),
+      cart_count: items.reduce((s,i)=> s + i.qty, 0),
+      order_total_formatted: (typeof fmtPrice==='function'? fmtPrice(total) : total.toString())};
     try{
       if(!window.emailjs){ throw new Error('EmailJS SDK not loaded'); }
       const res = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
