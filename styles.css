@@ -1,0 +1,178 @@
+
+:root{
+  --bg: #ffffff;
+  --card: #f9fafc;
+  --muted: #555;
+  --text: #1a1a1a;
+  --brand: #0d81b7;
+  --brand-2: #54c084;
+  --ring: rgba(13,129,183,0.25);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #ffffff;
+  color: var(--text);
+  line-height:1.6;
+}
+img{max-width:100%; display:block}
+
+.container{width:100%; max-width:1180px; margin:0 auto; padding:0 16px}
+
+.header{
+  position:sticky; top:0; z-index:50;
+  background:#fff;
+  border-bottom: 1px solid #e0e0e0;
+}
+.header__inner{display:flex; align-items:center; justify-content:space-between; min-height:64px;}
+.logo{color:var(--text); text-decoration:none; font-weight:700; letter-spacing:0.3px}
+.logo span{color:var(--brand)}
+.header__actions{display:flex; gap:10px; align-items:center}
+
+.lang-switch{
+  padding:6px 10px; border:1px solid #ccc;
+  background:#fff; color:var(--text); border-radius:8px; cursor:pointer;
+}
+.lang-switch.active{border-color:var(--brand); background:#e6f6fc}
+
+.burger{display:none; width:40px; height:32px; align-items:center; justify-content:center; border:1px solid #ccc; background:#fff; border-radius:8px; cursor:pointer}
+.burger span{display:block; width:20px; height:2px; background:#333; margin:3px 0}
+
+.nav{display:flex}
+.nav ul{display:flex; gap:18px; list-style:none; padding:0; margin:0}
+.nav a{color:#333; text-decoration:none; font-size:14px}
+.nav a:hover{color:var(--brand)}
+.nav__close{display:none}
+
+.overlay{position:fixed; inset:0; background:rgba(0,0,0,0.4); opacity:0; visibility:hidden; transition:0.25s; z-index:39}
+.overlay.active{opacity:1; visibility:visible}
+
+.section{padding:70px 0}
+.section__head{margin-bottom:32px; text-align:center}
+.section__head h2{margin:0 0 10px 0; font-size:32px; color:var(--brand)}
+.lead{color:var(--muted)}
+
+.grid{display:grid; gap:20px}
+.grid--2{grid-template-columns: repeat(2, 1fr)}
+.grid--3{grid-template-columns: repeat(3, 1fr)}
+.grid--4{grid-template-columns: repeat(4, 1fr)}
+
+.card{
+  background: var(--card);
+  border:1px solid #e0e0e0;
+  border-radius:12px; padding:20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.btn{display:inline-block; padding:12px 18px; border-radius:8px; text-decoration:none; font-weight:600}
+.btn--primary{background: linear-gradient(135deg,var(--brand), var(--brand-2)); color:#fff}
+.btn--outline{border:1px solid #ccc; color:var(--text); background:#fff}
+.link{color:var(--brand); text-decoration:none}
+
+.hero{padding:90px 0 60px; background:#f5f9fc}
+.hero__inner{display:grid; gap:24px; grid-template-columns:1.2fr 1fr; align-items:center}
+.hero__image img{border-radius:12px; border:1px solid #ddd}
+
+.stat{text-align:center}
+.stat__num{font-size:28px; font-weight:700; color:var(--brand)}
+.stat__label{color:var(--muted)}
+
+.brands__list{display:flex; gap:30px; align-items:center; justify-content:center}
+.brands__list img{width:120px; height:60px; object-fit:contain}
+
+.geo__map img{width:100%; height:auto; border-radius:12px; border:1px solid #ddd}
+
+.partners__cta{margin-top:20px}
+
+.quote p{color:#333; font-style:italic}
+.quote cite{display:block; margin-top:8px; color:#777; font-style:normal}
+
+.form{display:block; max-width:720px; margin:0 auto}
+.form__grid{margin-bottom:12px}
+.field{display:flex; flex-direction:column; gap:6px}
+.field input, .field textarea{
+  width:100%; padding:12px; border-radius:8px;
+  background:#fff; border:1px solid #ccc; color:#000;
+  outline:none;
+}
+.field input:focus, .field textarea:focus{border-color: var(--brand); box-shadow: 0 0 0 2px var(--ring)}
+.field--full{grid-column: 1 / -1}
+
+.chip{display:inline-block; padding:8px 12px; border-radius:20px; border:1px solid #ccc; color:#333; text-decoration:none; margin-right:6px; background:#fafafa}
+
+.footer{padding:28px 0; border-top:1px solid #e0e0e0; background:#fafafa}
+.footer__inner{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.footer__nav{display:flex; gap:16px; flex-wrap:wrap}
+.footer__nav a{color:#555; text-decoration:none}
+.footer__nav a:hover{color:var(--brand)}
+
+/* Responsive */
+@media (max-width: 992px){
+  .grid--4{grid-template-columns: repeat(2, 1fr)}
+  .hero__inner{grid-template-columns:1fr}
+}
+@media (max-width: 720px){
+  .grid--3{grid-template-columns:1fr}
+  .grid--2{grid-template-columns:1fr}
+  .section{padding:50px 0}
+  .nav{
+    position:fixed; inset:0 0 0 auto; width:min(85%, 360px); height:100vh; background:#fff;
+    transform: translateX(100%); transition: transform .25s ease; z-index:40; padding:20px;
+    border-left:1px solid #ddd;
+  }
+  .nav.open{transform: translateX(0)}
+  .nav ul{flex-direction:column; gap:14px; margin-top:40px}
+  .nav__close{display:block; font-size:28px; background:transparent; border:none; color:#333}
+  .burger{display:flex}
+}
+
+
+/* === Fixes: sticky header -> fixed header, safe offset, and overflow control === */
+:root{ --header-h: 64px; }
+
+body { overflow-x: hidden; }
+
+.header{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+main { padding-top: calc(var(--header-h) + 10px); }
+
+.container { overflow-x: clip; }
+
+/* Extra-small screens: collapse any 4-col grids to 1 column to avoid sideways shift */
+@media (max-width: 540px){
+  .grid--4{ grid-template-columns: 1fr; }
+  .grid--3{ grid-template-columns: 1fr; }
+}
+
+/* Ensure cards don't enforce min-width that could cause overflow */
+.card { min-width: 0; }
+
+/* Nav panel width constraint and safe box sizing */
+.nav{ box-sizing: border-box; }
+
+
+
+/* Position the mobile close button at the top-right inside the panel */
+@media (max-width: 720px){
+  .nav{ position:fixed; padding-top:16px; }
+  .nav__close{
+    position:absolute;
+    top:10px; right:12px;
+    line-height:1; width:auto; height:auto;
+  }
+}
+
+/* Category and news images styling */
+.cat__img{
+  width:100%; height:140px; object-fit:cover; border-radius:8px; margin-bottom:10px;
+}
+.post__img{
+  width:100%; height:160px; object-fit:cover; border-radius:8px; margin-bottom:10px;
+}

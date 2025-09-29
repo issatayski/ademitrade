@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FMCG Distributor — RU/KZ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__inner">
+      <a class="logo" href="#"><span>FMCG</span> Distributor</a>
+      <nav class="nav" id="siteNav" aria-label="Primary">
+        <button class="nav__close" id="navClose" aria-label="Close menu">×</button>
+        <ul>
+          <li><a href="#hero" data-i18n="nav.home">Главная</a></li>
+          <li><a href="#about" data-i18n="nav.about">О компании</a></li>
+          <li><a href="#catalog" data-i18n="nav.catalog">Каталог</a></li>
+          <li><a href="#brands" data-i18n="nav.brands">Бренды</a></li>
+          <li><a href="#benefits" data-i18n="nav.benefits">Преимущества</a></li>
+          <li><a href="#contacts" data-i18n="nav.contacts">Контакты</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <button class="lang-switch" id="langRu" data-lang="ru">RU</button>
+        <button class="lang-switch" id="langKz" data-lang="kz">KZ</button>
+        <button class="burger" id="burger" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. Hero -->
+    <section id="hero" class="section hero">
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <h1 data-i18n="hero.title">Надёжный дистрибьютор товаров народного потребления</h1>
+          <p class="lead" data-i18n="hero.subtitle">Оптовые поставки продуктов питания, напитков и товаров для дома по всей стране</p>
+          <div class="hero__cta">
+            <a href="#catalog" class="btn btn--primary" data-i18n="hero.cta_catalog">Каталог продукции</a>
+            <a href="#partners" class="btn btn--outline" data-i18n="hero.cta_partner">Стать партнёром</a>
+          </div>
+        </div>
+        <div class="hero__image" role="img" aria-label="Assorted FMCG products">
+          <img src="assets/img/hero-placeholder.jpg" alt="Ассортимент FMCG" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. About -->
+    <section id="about" class="section about">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="about.title">О компании</h2>
+          <p data-i18n="about.desc">Мы помогаем брендам и розничным сетям эффективно встречаться на полке — надёжная логистика, стабильные поставки и поддержка партнёров.</p>
+        </div>
+        <div class="grid grid--4 about__stats">
+          <div class="card stat">
+            <div class="stat__num">20+</div>
+            <div class="stat__label" data-i18n="about.years">лет на рынке</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">500+</div>
+            <div class="stat__label" data-i18n="about.clients">клиентов</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">1000+</div>
+            <div class="stat__label" data-i18n="about.sku">SKU в портфеле</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">15</div>
+            <div class="stat__label" data-i18n="about.regions">регионов доставки</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Catalog -->
+    <section id="catalog" class="section catalog">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="catalog.title">Категории продукции</h2>
+          <p data-i18n="catalog.desc">Сбалансированный портфель брендов для розницы, HoReCa и e‑commerce</p>
+        </div>
+        <div class="grid grid--4">
+          <article class="card category">
+            <img class="cat__img" src="assets/img/cat-food.jpg" alt="Продукты питания" />
+            <h3 data-i18n="catalog.food">Продукты питания</h3>
+            <p data-i18n="catalog.food_desc">Крупы, снеки, кондитерка, бакалея и more</p>
+            <a href="#partners" class="link" data-i18n="common.more">Подробнее</a>
+          </article>
+          <article class="card category">
+            <img class="cat__img" src="assets/img/cat-drinks.jpg" alt="Напитки" />
+            <h3 data-i18n="catalog.drinks">Напитки</h3>
+            <p data-i18n="catalog.drinks_desc">Вода, соки, энергетики, чай/кофе</p>
+            <a href="#partners" class="link" data-i18n="common.more">Подробнее</a>
+          </article>
+          <article class="card category">
+            <img class="cat__img" src="assets/img/cat-household.jpg" alt="Бытовая химия" />
+            <h3 data-i18n="catalog.household">Бытовая химия</h3>
+            <p data-i18n="catalog.household_desc">Чистящие, моющие, уход за домом</p>
+            <a href="#partners" class="link" data-i18n="common.more">Подробнее</a>
+          </article>
+          <article class="card category">
+            <img class="cat__img" src="assets/img/cat-family.jpg" alt="Товары для семьи" />
+            <h3 data-i18n="catalog.family">Товары для семьи</h3>
+            <p data-i18n="catalog.family_desc">Гигиена, косметика, товары для детей</p>
+            <a href="#partners" class="link" data-i18n="common.more">Подробнее</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Brands -->
+    <section id="brands" class="section brands">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="brands.title">Популярные бренды</h2>
+          <p data-i18n="brands.desc">Сотрудничаем с международными и локальными производителями</p>
+        </div>
+        <div class="brands__list">
+          <img src="assets/img/brand1.png" alt="Brand 1" />
+          <img src="assets/img/brand2.png" alt="Brand 2" />
+          <img src="assets/img/brand3.png" alt="Brand 3" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Benefits -->
+    <section id="benefits" class="section benefits">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="benefits.title">Наши преимущества</h2>
+          <p data-i18n="benefits.desc">Прозрачные условия, быстрая поставка и поддержка мерчендайзинга</p>
+        </div>
+        <div class="grid grid--4">
+          <div class="card benefit">
+            <h3 data-i18n="benefits.assort">Широкий ассортимент</h3>
+            <p data-i18n="benefits.assort_desc">Сбалансированные SKU по категориям и ценовым сегментам</p>
+          </div>
+          <div class="card benefit">
+            <h3 data-i18n="benefits.logistics">Надёжная логистика</h3>
+            <p data-i18n="benefits.logistics_desc">Собственные и партнёрские склады, точные отгрузки</p>
+          </div>
+          <div class="card benefit">
+            <h3 data-i18n="benefits.terms">Гибкие условия</h3>
+            <p data-i18n="benefits.terms_desc">Индивидуальные условия для розницы, HoReCa и e‑com</p>
+          </div>
+          <div class="card benefit">
+            <h3 data-i18n="benefits.support">Поддержка партнёров</h3>
+            <p data-i18n="benefits.support_desc">POS‑материалы, промо и трейд‑маркетинг</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Geography -->
+    <section id="geo" class="section geo">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="geo.title">География поставок</h2>
+          <p data-i18n="geo.desc">Охватываем ключевые города и регионы</p>
+        </div>
+        <div class="geo__map">
+          <img src="assets/img/map-placeholder.jpg" alt="Карта поставок" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Partners -->
+    <section id="partners" class="section partners">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="partners.title">Условия для партнёров</h2>
+          <p data-i18n="partners.desc">Прозрачные правила и быстрый онбординг</p>
+        </div>
+        <div class="grid grid--3">
+          <div class="card">
+            <h3 data-i18n="partners.moq">Минимальная партия</h3>
+            <p data-i18n="partners.moq_desc">Гибкие MOQ для разных каналов</p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="partners.delivery">Доставка</h3>
+            <p data-i18n="partners.delivery_desc">Регулярные графики и SLA</p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="partners.support">Поддержка</h3>
+            <p data-i18n="partners.support_desc">Обучение персонала и маркетинговая поддержка</p>
+          </div>
+        </div>
+        <a href="#contacts" class="btn btn--primary partners__cta" data-i18n="partners.cta">Запросить прайс-лист</a>
+      </div>
+    </section>
+
+    <!-- 8. News -->
+    <section id="news" class="section news">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="news.title">Новости и акции</h2>
+          <p data-i18n="news.desc">Спецпредложения и новые поступления</p>
+        </div>
+        <div class="grid grid--3">
+          <article class="card post">
+            <img class="post__img" src="assets/img/news-1.jpg" alt="Скидка на чай и кофе" />
+            <h3 data-i18n="news.post1_title">Скидка на чай и кофе</h3>
+            <p data-i18n="news.post1_desc">Выгодные условия для HoReCa на Q4</p>
+          </article>
+          <article class="card post">
+            <img class="post__img" src="assets/img/news-2.jpg" alt="Новые бренды в портфеле" />
+            <h3 data-i18n="news.post2_title">Новые бренды в портфеле</h3>
+            <p data-i18n="news.post2_desc">Расширяем ассортимент бакалеи</p>
+          </article>
+          <article class="card post">
+            <img class="post__img" src="assets/img/news-3.jpg" alt="График доставок" />
+            <h3 data-i18n="news.post3_title">График доставок</h3>
+            <p data-i18n="news.post3_desc">Обновления по ключевым направлениям</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Reviews -->
+    <section id="reviews" class="section reviews">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="reviews.title">Отзывы партнёров</h2>
+          <p data-i18n="reviews.desc">Нам доверяют локальные сети и федеральные игроки</p>
+        </div>
+        <div class="grid grid--3">
+          <blockquote class="card quote">
+            <p data-i18n="reviews.q1">Надёжные сроки, аккуратные поставки — рекомендую!</p>
+            <cite>Retail Manager</cite>
+          </blockquote>
+          <blockquote class="card quote">
+            <p data-i18n="reviews.q2">Удобный прайс и разумные MOQ — легко стартовать.</p>
+            <cite>HoReCa Lead</cite>
+          </blockquote>
+          <blockquote class="card quote">
+            <p data-i18n="reviews.q3">Помогли с мерчендайзингом и промо — продажи выросли.</p>
+            <cite>E‑com Buyer</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Facts -->
+    <section id="facts" class="section facts">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="facts.title">Факты о нас</h2>
+          <p data-i18n="facts.desc">Сухие цифры — лучшая иллюстрация стабильности</p>
+        </div>
+        <div class="grid grid--4 about__stats">
+          <div class="card stat">
+            <div class="stat__num">98%</div>
+            <div class="stat__label" data-i18n="facts.otif">OTIF по отгрузкам</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">48ч</div>
+            <div class="stat__label" data-i18n="facts.sla">Средний SLA доставки</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">30+</div>
+            <div class="stat__label" data-i18n="facts.brands">брендов в портфеле</div>
+          </div>
+          <div class="card stat">
+            <div class="stat__num">10k+</div>
+            <div class="stat__label" data-i18n="facts.pallets">паллето‑мест на складе</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Contacts -->
+    <section id="contacts" class="section contacts">
+      <div class="container">
+        <div class="section__head">
+          <h2 data-i18n="contacts.title">Контакты</h2>
+          <p data-i18n="contacts.desc">Оставьте заявку — вернёмся с прайсом и условиями</p>
+        </div>
+        <form class="form" onsubmit="event.preventDefault(); alert(i18n.t('contacts.alert'));">
+          <div class="grid grid--2 form__grid">
+            <label class="field">
+              <span data-i18n="form.name">Имя</span>
+              <input type="text" placeholder="" required>
+            </label>
+            <label class="field">
+              <span data-i18n="form.company">Компания</span>
+              <input type="text" placeholder="" required>
+            </label>
+            <label class="field">
+              <span data-i18n="form.email">Email</span>
+              <input type="email" placeholder="" required>
+            </label>
+            <label class="field">
+              <span data-i18n="form.phone">Телефон</span>
+              <input type="tel" placeholder="" required>
+            </label>
+            <label class="field field--full">
+              <span data-i18n="form.message">Сообщение</span>
+              <textarea rows="4" placeholder=""></textarea>
+            </label>
+          </div>
+          <button class="btn btn--primary" type="submit" data-i18n="form.submit">Отправить</button>
+          <div class="contacts__quick">
+            <a href="#" class="chip">WhatsApp</a>
+            <a href="#" class="chip">Telegram</a>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- 12. Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© <span id="year"></span> FMCG Distributor</p>
+      <nav class="footer__nav">
+        <a href="#catalog" data-i18n="nav.catalog">Каталог</a>
+        <a href="#about" data-i18n="nav.about">О компании</a>
+        <a href="#contacts" data-i18n="nav.contacts">Контакты</a>
+      </nav>
+    </div>
+  </footer>
+
+  <div class="overlay" id="overlay"></div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
