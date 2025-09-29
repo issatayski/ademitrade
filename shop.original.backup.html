@@ -1,34 +1,25 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ademi Trade</title>
   <style>
     :root{
-      --bg: #ffffff;
-      --card: #f9fafc;
-      --muted: #555;
-      --text: #1a1a1a;
-      --brand: #0d81b7;
-      --brand-2: #54c084;
-      --ring: rgba(13,129,183,0.25);
+      --bg:#0f1115; --card:#151923; --muted:#8b93a7; --text:#e9edf5; --brand:#5aa8ff; --brand-2:#9ed968; --danger:#ff6b6b;
+      --ring: rgba(90,168,255,.35);
     }
     *{box-sizing:border-box}
-    html,body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    
-    
-    
-    
-    
-    
-    
-    
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Noto Sans',Arial,sans-serif;background:linear-gradient(180deg,#0f1115 0%,#0f1320 100%);color:var(--text)}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    header{position:sticky;top:0;z-index:20;background:rgba(15,19,32,.7);backdrop-filter: blur(8px);border-bottom:1px solid #222}
+    header .wrap{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:12px 0}
+    .logo{font-weight:700;letter-spacing:.4px}
+    .controls{display:flex;gap:10px;flex-wrap:wrap}
+    .input, select{background:var(--card);border:1px solid #222;border-radius:12px;color:var(--text);padding:12px 14px;outline:none;min-width:220px}
+    .input:focus, select:focus{border-color:var(--brand); box-shadow:0 0 0 6px var(--ring)}
     .btn{border:0;border-radius:12px;padding:12px 16px;background:var(--brand);color:#04121e;font-weight:700;cursor:pointer}
     .btn.secondary{background:#222;color:var(--text);border:1px solid #2a2f3a}
     .btn.ghost{background:transparent;border:1px solid #2a2f3a;color:var(--text)}
@@ -41,7 +32,7 @@
     .card{background:var(--card);border:1px solid #222;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
     .card-img{aspect-ratio:1/1;background:#0b0e16;display:grid;place-items:center}
     .card-img img{width:100%;height:100%;object-fit:cover}
-    .card-body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .card-body{padding:12px;display:flex;flex-direction:column;gap:10px}
     .card-title{font-weight:700;font-size:14px;min-height:38px}
     .price{display:flex;align-items:center;gap:8px}
     .price .old{color:#9aa3b6;text-decoration:line-through}
@@ -79,17 +70,6 @@
   .cart .qty .qminus, .cart .qty .qplus{ width:36px; height:36px; }
   .cart .qty .qinput{ width:64px; }
 }
-
-
-/* Scoped controls under shop-controls to avoid conflicts */
-.shop-controls{display:flex; gap:10px; flex-wrap:wrap; align-items:center; padding:14px 0}
-.shop-controls .input, .shop-controls select{
-  background:var(--card); border:1px solid #ddd; border-radius:10px; color:var(--text);
-  padding:12px 14px; outline:none; min-width:220px;
-}
-.shop-controls .input:focus, .shop-controls select:focus{ border-color:var(--brand); box-shadow:0 0 0 5px var(--ring) }
-.cart-link{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid #ccc; background:#fff; border-radius:10px; text-decoration:none; font-weight:600 }
-.cart-link .badge{ display:inline-block; min-width:20px; padding:2px 6px; border-radius:999px; background:var(--brand); color:#fff; text-align:center; font-size:12px }
 </style>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
@@ -102,50 +82,24 @@
   </script>
 </head>
 <body>
-  <header class="header">
-    <div class="container header__inner">
-      <a class="logo" href="https://ademitrade.kz"><span>Ademi</span> Trade</a>
-      <nav class="nav" id="siteNav" aria-label="Primary">
-        <button class="nav__close" id="navClose" aria-label="Close menu">×</button>
-        <ul>
-          <li><a href="index.html#hero" data-i18n="nav.home">Главная</a></li>
-          <li><a href="index.html#about" data-i18n="nav.about">О компании</a></li>
-          <li><a href="shop.html" data-i18n="nav.catalog">Каталог</a></li>
-          <li><a href="index.html#brands" data-i18n="nav.brands">Бренды</a></li>
-          <li><a href="index.html#benefits" data-i18n="nav.benefits">Преимущества</a></li>
-          <li><a href="index.html#contacts" data-i18n="nav.contacts">Контакты</a></li>
-        </ul>
+  <header>
+    <div class="container wrap">
+      <div class="logo">Ademi Trade</div>
+      <nav class="controls">
+        <input id="search" class="input" type="search" placeholder="Search products…" />
+        <select id="category"></select>
       </nav>
-
-      <div class="header__actions">
-        <button class="lang-switch" id="langRu" data-lang="ru">RU</button>
-        <button class="lang-switch" id="langKz" data-lang="kz">KZ</button>
-<a href="shop.html#cart" class="cart-link" id="cartLink" aria-label="Open cart" style="display:inline-flex;align-items:center;gap:6px;margin-left:8px">
-          <span class="cart-icon" aria-hidden="true">🛒</span>
-          <span class="badge" id="cartBadge">0</span>
-        </a>
-        <button class="burger" id="burger" aria-label="Open menu">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
+      <a href="#cart" class="cart-link" id="cartLink" aria-label="Open cart">
+        <span>Cart</span>
+        <span class="badge" id="cartBadge">0</span>
+      </a>
     </div>
   </header>
-<div class="container shop-controls">
-    <input id="search" class="input" type="search" placeholder="Search products…" />
-    <select id="category"></select>
-  </div>
 
   <main class="container" id="app"></main>
 
-  <footer class="footer">
-    <div class="container footer__inner">
-      <p>© <span id="year"></span> Ademi Trade</p>
-      <nav class="footer__nav">
-        <a href="shop.html" data-i18n="nav.catalog">Каталог</a>
-        <a href="index.html#about" data-i18n="nav.about">О компании</a>
-        <a href="index.html#contacts" data-i18n="nav.contacts">Контакты</a>
-      </nav>
-    </div>
+  <footer>
+    <div class="container">Data from <code>products.csv</code>; cart in <code>localStorage</code>. EmailJS for checkout.</div>
   </footer>
 
   <script>
@@ -432,7 +386,5 @@ p8,Mineral Water 1.5L,Drinks,260,,https://picsum.photos/seed/water/600
 p9,Milk Chocolate 90g,Snacks,520,460,https://picsum.photos/seed/chocolate/600
 p10,Strawberry Yogurt 125g,Dairy,320,,https://picsum.photos/seed/yogurt/600
   </script>
-  <div class="overlay" id="overlay"></div>
-  <script src="scripts.js"></script>
 </body>
 </html>
